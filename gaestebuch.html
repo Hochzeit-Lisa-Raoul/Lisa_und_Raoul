@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Freundebuch | Lisa & Raoul</title>
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<header>
+
+    <h1>❦ Lisa & Raoul ❦</h1>
+    <p>Freundebuch</p>
+
+</header>
+
+<nav>
+
+    <a href="index.html">Home</a>
+    <a href="ueber-uns.html">Über uns</a>
+    <a href="chronik.html">Chronik</a>
+    <a href="galerie.html">Galerie</a>
+    <a href="gaestebuch.html">Gästebuch</a>
+    <a href="nuetzliches.html">Nützliches</a>
+
+</nav>
+
+
+<section class="karte">
+
+<h2>🌿 Unser Freundebuch 🌿</h2>
+
+<p>
+
+Schön, dass ihr Teil unserer Geschichte seid.<br>
+Wir freuen uns auf eure Erinnerungen, Wünsche und lustigen Antworten.<br>
+Vielleicht lesen wir sie gemeinsam zur Silberhochzeit wieder.
+
+</p>
+
+
+<form id="freundebuchForm">
+
+<label class="frage">
+👤 Wer seid ihr?
+</label>
+
+<input
+type="text"
+name="name"
+placeholder="Name oder Namen"
+required>
+
+
+
+<label class="frage">
+🤝 Woher kennt ihr Lisa & Raoul?
+</label>
+
+<input
+type="text"
+name="kennt"
+placeholder="Familie, Freunde, Verein...">
+
+
+
+<label class="frage">
+❤️ Welche verrückte Schlagzeile könnte 2051 über Lisa & Raoul erscheinen?
+</label>
+
+<input
+type="text"
+name="drei_worte"
+placeholder="z.B. herzlich • verrückt • unzertrennlich">
+
+
+
+<label class="frage">
+🎯 Eure Challenge für Lisa & Raoul
+</label>
+
+<textarea
+name="challenge"
+rows="4"
+placeholder="Welche Aufgabe sollen die beiden bis zur Silberhochzeit erfüllen?"></textarea>
+
+
+
+<label class="frage">
+📸 Welchen geheimen Titel verdient Lisa oder Raoul? (z. B. „Weltmeister im …“)
+</label>
+
+<textarea
+name="erinnerung"
+rows="4"></textarea>
+
+
+
+<label class="frage">
+📦 Nachricht für die Zeitkapsel - Was glaubt ihr, hat sich bis dahin verändert – und was wird gleich geblieben sein?
+</label>
+
+<p>
+
+Diese Nachricht möchten wir erst zur Silberhochzeit lesen.
+
+</p>
+
+<textarea
+name="zeitkapsel"
+rows="6"
+placeholder="Liebe Lisa, lieber Raoul, ..."></textarea>
+
+
+
+<button type="submit">
+
+Eintrag speichern
+
+</button>
+
+</form>
+
+</section>
+
+
+
+<section class="karte">
+
+<details>
+
+<summary>
+🌿 Bisherige Einträge anzeigen
+</summary>
+
+<div id="eintraege">
+
+<p>
+Noch keine Einträge vorhanden.
+</p>
+
+</div>
+
+</details>
+
+</section>
+
+
+
+<footer>
+
+❦ Lisa & Raoul ❦
+
+</footer>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="script.js"></script>
+
+</body>
+
+</html>
+
+<div id="eintraege">
+    <p>
+        Noch keine Einträge vorhanden.
+    </p>
+</div>
