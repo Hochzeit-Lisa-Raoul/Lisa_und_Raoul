@@ -1,0 +1,245 @@
+* {
+  box-sizing:border-box;
+  }
+
+body {
+
+margin:0;
+
+background:#f7f1e8;
+
+color:#4b4035;
+
+font-family:Arial, sans-serif;
+
+text-align:center;
+
+}
+
+header {
+
+background:#d8c3a5;
+
+padding:50px;
+
+}
+
+header h1 {
+
+font-family:Georgia, serif;
+
+font-size:70px;
+
+margin:10px;
+
+}
+
+nav {
+
+background:#826b52;
+
+padding:15px;
+
+}
+
+nav a {
+
+color:white;
+
+text-decoration:none;
+
+margin:10px;
+
+font-size:16px;
+
+}
+
+nav a:hover {
+
+opacity:0.7;
+
+}
+
+.karte {
+
+background:#fffaf3;
+
+max-width:800px;
+
+margin:40px auto;
+
+padding:35px;
+
+border-radius:20px;
+
+box-shadow:0 10px 20px rgba(0,0,0,.1);
+
+}
+
+h2 {
+
+font-family:Georgia,serif;
+
+color:#826b52;
+
+font-size:40px;
+
+}
+
+.counter {
+
+font-size:28px;
+
+font-weight:bold;
+
+margin:25px;
+
+}
+
+.news {
+
+background:#eee1cf;
+
+padding:20px;
+
+margin:15px;
+
+border-radius:15px;
+
+}
+
+footer {
+
+padding:40px;
+
+}
+
+.timeline {
+
+position:relative;
+
+max-width:800px;
+
+margin:50px auto;
+
+}
+
+.timeline::before {
+
+content:"";
+
+position:absolute;
+
+left:50%;
+
+top:0;
+
+bottom:0;
+
+width:3px;
+
+background:#c6ae8b;
+
+transform:translateX(-50%);
+
+}
+
+.timeline-item {
+
+position:relative;
+
+width:50%;
+
+padding:20px 40px;
+
+}
+
+.timeline-item:nth-child(odd){
+
+left:0;
+
+text-align:right;
+
+}
+
+.timeline-item:nth-child(even){
+
+left:50%;
+
+text-align:left;
+
+}
+
+.timeline-item::after {
+
+content:"";
+
+position:absolute;
+
+top:30px;
+
+width:18px;
+
+height:18px;
+
+background:#826b52;
+
+border-radius:50%;
+
+z-index:2;
+
+}
+
+.timeline-item:nth-child(odd)::after {
+
+right:-9px;
+
+}
+
+.timeline-item:nth-child(even)::after {
+
+left:-9px;
+
+}
+
+.timeline-content {
+
+background:#eee1cf;
+
+padding:20px;
+
+border-radius:15px;
+
+}
+
+.timeline-content h3 {
+
+font-family:Georgia,serif;
+
+font-size:30px;
+
+color:#826b52;
+
+margin-top:0;
+
+}
+
+.galerie {
+
+display:grid;
+
+grid-template-columns:
+repeat(auto-fit,minmax(200px,1fr));
+
+gap:20px;
+
+}
+
+
+.galerie img {
+
+width:100%;
+
+border-radius:15px;
+
+}
