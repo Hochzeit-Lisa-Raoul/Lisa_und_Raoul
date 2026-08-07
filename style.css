@@ -309,26 +309,35 @@ form button:active {
         font-size:42px;
     }
 
-    nav{
+nav{
 
-        display:flex;
-        flex-wrap:wrap;
-        justify-content:center;
-        align-items:center;
-        gap:8px;
-        padding:12px 10px;
+    display:grid;
 
-    }
+    grid-template-columns:repeat(3,minmax(0,1fr));
 
-    nav a{
+    gap:8px;
 
-        display:block;
-        margin:0;
-        padding:8px 12px;
-        font-size:15px;
-        white-space:nowrap;
+    padding:12px;
 
-    }
+}
+
+nav a{
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    margin:0;
+
+    padding:10px 4px;
+
+    font-size:14px;
+
+    text-align:center;
+
+}
 
     .karte{
 
