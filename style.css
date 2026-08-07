@@ -46,6 +46,14 @@ background:#604936;
 
 padding:15px;
 
+position:sticky;
+
+top:0;
+
+z-index:1000;
+
+box-shadow:0 3px 10px rgba(0,0,0,.15);
+
 }
 
 
@@ -62,9 +70,29 @@ font-size:16px;
 }
 
 
+nav a {
+
+color:white;
+
+text-decoration:none;
+
+margin:10px;
+
+font-size:16px;
+
+padding:8px 12px;
+
+border-radius:8px;
+
+transition:.25s;
+
+}
+
 nav a:hover {
 
-opacity:0.7;
+background:rgba(255,255,255,.15);
+
+opacity:1;
 
 }
 
@@ -443,5 +471,100 @@ form button:active{
     min-height:40px;
 
     color:#604936;
+
+}
+
+@media (max-width: 768px) {
+
+    header {
+        padding:30px 15px;
+    }
+
+    header h1 {
+        font-size:42px;
+    }
+
+    nav {
+        display:flex;
+        flex-wrap:wrap;
+        justify-content:center;
+        gap:10px;
+    }
+
+    nav a {
+        margin:5px;
+        font-size:15px;
+    }
+
+    .karte {
+        margin:20px 15px;
+        padding:25px;
+    }
+
+    h2 {
+        font-size:30px;
+    }
+
+    .counter {
+        font-size:22px;
+    }
+
+}
+/* ---------- Handyansicht ---------- */
+
+@media (max-width: 768px) {
+
+    header {
+        padding: 30px 15px;
+    }
+
+    header h1 {
+        font-size: 42px;
+    }
+
+    nav {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 8px;
+        padding: 12px;
+    }
+
+    nav a {
+        margin: 4px;
+        font-size: 15px;
+    }
+
+    .karte {
+        margin: 20px 15px;
+        padding: 25px;
+    }
+
+    h2 {
+        font-size: 30px;
+    }
+
+    .counter {
+        font-size: 22px;
+    }
+
+    /* Timeline */
+
+    .timeline::before {
+        left: 20px;
+        transform: none;
+    }
+
+    .timeline-item {
+        width: 100%;
+        left: 0 !important;
+        padding: 20px 20px 20px 55px;
+        text-align: left !important;
+    }
+
+    .timeline-item::after {
+        left: 11px !important;
+        right: auto !important;
+    }
 
 }
