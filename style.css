@@ -415,7 +415,19 @@ nav a{
         right:auto !important;
 
     }
+   
+   /* Baby-Bild auf dem Handy */
+    .baby-item .timeline-image {
+        position: static;
+        width: 100%;
+        margin: 15px 0 0 0;
+    }
 
+    .baby-item .timeline-image img {
+        width: 100px;
+        height: 100px;
+        margin: 0 auto;
+    }
 }
 
 /* =========================================================
