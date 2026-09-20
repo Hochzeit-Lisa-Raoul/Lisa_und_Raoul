@@ -340,7 +340,7 @@ async function ladeEintraege() {
             <h3>🌿 ${eintrag.name}</h3>
 
             <p>
-                <strong>Kennt A + B:</strong><br>
+                <strong>Kennt Lisa & Raoul:</strong><br>
                 ${eintrag.kennt || ""}
             </p>
 
