@@ -7,7 +7,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Über uns | A+B</title>
+<title>Über uns | Lisa & Raoul</title>
 
 <link rel="stylesheet" href="style.css">
 
@@ -29,29 +29,102 @@
 
 </nav>
 
-<section class="karte">
+<section class="unsere-geschichte">
 
-<h2>Unsere Geschichte</h2>
+    <h2>Unsere Geschichte</h2>
 
-<p>
-Hier entsteht unsere persönliche Geschichte.
-</p>
+    <p class="geschichte-intro">
+        Blättert durch unsere gemeinsame Geschichte und entdeckt
+        die besonderen Momente, die uns zu dem gemacht haben,
+        was wir heute sind.
+    </p>
 
-<p>
-Wie wir uns kennengelernt haben,
-was uns verbindet und welche Momente
-uns geprägt haben.
-</p>
+    <div class="geschichte-album">
+
+        <!-- Kopf des Albums -->
+        <div class="album-kopf">
+
+            <span class="album-titel">
+                Unsere Geschichte
+            </span>
+
+            <span class="album-status" id="albumStatus">
+                Seite 1 von 19
+            </span>
+
+        </div>
+
+
+        <!-- PDF-Bereich -->
+        <div class="pdf-container">
+
+            <iframe
+                id="pdfViewer"
+                src="Zeitung/Seite_01.pdf"
+                title="Unsere Geschichte – Seite 01">
+            </iframe>
+
+        </div>
+
+
+        <!-- Hinweis -->
+        <p class="pdf-hinweis">
+            📖 Einige Abschnitte enthalten mehrere Seiten.
+            Innerhalb der PDF kannst du ganz normal blättern.
+        </p>
+
+
+        <!-- Navigation -->
+        <div class="album-navigation">
+
+            <button
+                type="button"
+                id="zurueckButton"
+                class="album-button zurueck">
+                ← Zurück
+            </button>
+
+
+            <span
+                id="seitenAnzeige"
+                class="seiten-anzeige">
+                1 / 19
+            </span>
+
+
+            <button
+                type="button"
+                id="weiterButton"
+                class="album-button weiter">
+                Weiter →
+            </button>
+
+        </div>
+
+
+        <!-- PDF separat öffnen -->
+        <div class="pdf-extra">
+
+            <a
+                id="pdfOpenButton"
+                href="Zeitung/Seite_01.pdf"
+                target="_blank"
+                rel="noopener"
+                class="pdf-open-button">
+
+                ↗ PDF separat öffnen
+
+            </a>
+
+        </div>
+
+    </div>
 
 </section>
 
-<footer>
-❦ Lisa & Raoul ❦
-</footer>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="script.js"></script>
 
 </body>
-
 </html>
+

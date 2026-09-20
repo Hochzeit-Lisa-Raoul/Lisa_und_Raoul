@@ -1,173 +1,312 @@
-/* alert("script.js wurde geladen!"); */
+/* =========================================================
+   LISA & RAOUL – SCRIPT.JS
+   ========================================================= */
 
 
+/* =========================================================
+   SUPABASE
+   ========================================================= */
 
 const supabaseUrl = "https://toykvrmttfljupbcukkf.supabase.co";
-const supabaseKey = "sb_publishable_3q5wwC-g36zWWYqH7d6qBw_IPev5RZJ";
 
-const supabaseClient = window.supabase.createClient(
-    supabaseUrl,
-    supabaseKey
-);
+const supabaseKey =
+    "sb_publishable_3q5wwC-g36zWWYqH7d6qBw_IPev5RZJ";
 
-/* alert("Supabase wurde erstellt!"); */
+let supabaseClient = null;
 
-const hochzeit = new Date(2026,8,26,0,0,0);
+if (window.supabase) {
+
+    supabaseClient =
+        window.supabase.createClient(
+            supabaseUrl,
+            supabaseKey
+        );
+
+}
+
+
+/* =========================================================
+   DATEN
+   ========================================================= */
+
+const hochzeit =
+    new Date(2026, 8, 17, 0, 0, 0);
 
 const silberhochzeit =
-new Date(2051,8,26,0,0,0);
+    new Date(2051, 8, 17, 0, 0, 0);
 
 const zehnJahre =
-new Date(2036,8,26,0,0,0);
-
-function zeit(diff){
-
-let minus = diff < 0;
-
-diff=Math.abs(diff);
-
-let tage=Math.floor(
-diff/(1000*60*60*24)
-);
-
-let stunden=Math.floor(
-(diff/(1000*60*60))%24
-);
-
-let minuten=Math.floor(
-(diff/(1000*60))%60
-);
-
-let sekunden=Math.floor(
-(diff/1000)%60
-);
-
-let text =
-tage+" Tage | "+
-stunden+" Stunden | "+
-minuten+" Minuten | "+
-sekunden+" Sekunden";
-
-return minus ? "- "+text : text;
-
-}
-
-function update(){
-
-let jetzt = new Date();
+    new Date(2036, 8, 17, 0, 0, 0);
 
 
-let feld = document.getElementById("ehezeit");
+/* =========================================================
+   ZEITBERECHNUNG
+   ========================================================= */
 
-if(feld){
+function zeit(diff) {
 
-    if(jetzt < hochzeit){
+    let minus = diff < 0;
 
-        feld.innerHTML =
-        zeit(hochzeit-jetzt);
+    diff = Math.abs(diff);
 
-    }
+    let tage =
+        Math.floor(
+            diff / (1000 * 60 * 60 * 24)
+        );
 
-    else {
+    let stunden =
+        Math.floor(
+            (diff / (1000 * 60 * 60)) % 24
+        );
 
-        feld.innerHTML =
-        zeit(jetzt-hochzeit);
+    let minuten =
+        Math.floor(
+            (diff / (1000 * 60)) % 60
+        );
 
-    }
+    let sekunden =
+        Math.floor(
+            (diff / 1000) % 60
+        );
+
+    let text =
+        tage + " Tage | " +
+        stunden + " Stunden | " +
+        minuten + " Minuten | " +
+        sekunden + " Sekunden";
+
+    return minus ? "- " + text : text;
 
 }
 
 
+/* =========================================================
+   COUNTDOWN
+   ========================================================= */
 
-let silber =
-document.getElementById("silberhochzeit");
+function update() {
 
-if(silber){
-
-    silber.innerHTML =
-    zeit(silberhochzeit-jetzt);
-
-}
+    let jetzt = new Date();
 
 
+    /* Hochzeits-Countdown */
 
-let jubilaeum =
-document.getElementById("jubilaeumCountdown");
+    let feld =
+        document.getElementById("ehezeit");
 
-if(jubilaeum){
+    if (feld) {
 
-    jubilaeum.innerHTML =
-    zeit(zehnJahre-jetzt);
+        if (jetzt < hochzeit) {
 
-}
-
-}
-
-update();
-
-setInterval(update,1000);
-
-const formular = document.getElementById("freundebuchForm");
-
-if (formular) {
-
-    formular.addEventListener("submit", async function (e) {
-
-        e.preventDefault();
-
-        const daten = new FormData(formular);
-
-        const eintrag = {
-
-            name: daten.get("name"),
-            kennt: daten.get("kennt"),
-            drei_worte: daten.get("drei_worte"),
-            challenge: daten.get("challenge"),
-            erinnerung: daten.get("erinnerung"),
-            zeitkapsel: daten.get("zeitkapsel")
-
-        };
-
-        const { error } = await supabaseClient
-            .from("Freundebuch")
-            .insert([eintrag]);
-
-        if (error) {
-
-            alert("Fehler: " + error.message);
+            feld.innerHTML =
+                zeit(hochzeit - jetzt) +
+                " </p>bis zu unserem großen Tag";
 
         } else {
 
-            alert("🌿 Vielen Dank für euren Eintrag!");
-
-            formular.reset();
+            feld.innerHTML =
+                zeit(jetzt - hochzeit) +
+                " </p>seit unserem großen Tag";
 
         }
 
-    });
+    }
+
+
+    /* Silberhochzeit */
+
+    let silber =
+        document.getElementById(
+            "silberhochzeit"
+        );
+
+    if (silber) {
+
+        silber.innerHTML =
+            zeit(
+                silberhochzeit - jetzt
+            );
+
+    }
+
+
+    /* 10 Jahre */
+
+    let jubilaeum =
+        document.getElementById(
+            "jubilaeumCountdown"
+        );
+
+    if (jubilaeum) {
+
+        jubilaeum.innerHTML =
+            zeit(
+                zehnJahre - jetzt
+            );
+
+    }
 
 }
+
+
+/* Countdown starten */
+
+update();
+
+setInterval(update, 1000);
+
+// =====================================================
+// Countdown kirchliche Trauung
+// =====================================================
+
+function updateKirchlicheTrauung() {
+
+    const heute = new Date();
+    const trauung = new Date("2026-09-26T00:00:00");
+
+    const diff = trauung - heute;
+
+    const tage = Math.floor(
+        Math.abs(diff) / (1000 * 60 * 60 * 24)
+    );
+
+    const element = document.getElementById("kirchlicheTrauungInfo");
+
+    if (!element) return;
+
+    if (diff > 0) {
+
+        element.textContent =
+            `${tage} ${tage === 1 ? "Tag" : "Tage"} bis zur kirchlichen Trauung`;
+
+    } else {
+
+        element.textContent =
+            `${tage} ${tage === 1 ? "Tag" : "Tage"} seit der kirchlichen Trauung`;
+
+    }
+}
+
+updateKirchlicheTrauung();
+
+setInterval(updateKirchlicheTrauung, 60000);
+
+
+/* =========================================================
+   GÄSTEBUCH – FORMULAR
+   ========================================================= */
+
+const formular =
+    document.getElementById(
+        "freundebuchForm"
+    );
+
+if (formular && supabaseClient) {
+
+    formular.addEventListener(
+        "submit",
+        async function (e) {
+
+            e.preventDefault();
+
+            const daten =
+                new FormData(formular);
+
+            const eintrag = {
+
+                name:
+                    daten.get("name"),
+
+                kennt:
+                    daten.get("kennt"),
+
+                drei_worte:
+                    daten.get("drei_worte"),
+
+                challenge:
+                    daten.get("challenge"),
+
+                erinnerung:
+                    daten.get("erinnerung"),
+
+                zeitkapsel:
+                    daten.get("zeitkapsel")
+
+            };
+
+
+            const { error } =
+                await supabaseClient
+                    .from("Freundebuch")
+                    .insert([eintrag]);
+
+
+            if (error) {
+
+                alert(
+                    "Fehler: " +
+                    error.message
+                );
+
+            } else {
+
+                alert(
+                    "🌿 Vielen Dank für euren Eintrag!"
+                );
+
+                formular.reset();
+
+            }
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   GÄSTEBUCH – EINTRÄGE LADEN
+   ========================================================= */
+
 async function ladeEintraege() {
 
-    const bereich = document.getElementById("eintraege");
+    const bereich =
+        document.getElementById(
+            "eintraege"
+        );
+
 
     if (!bereich) {
         return;
     }
 
 
-    const { data, error } = await supabaseClient
-        .from("Freundebuch")
-        .select("*")
-        .order("id", { ascending: false });
+    if (!supabaseClient) {
+
+        bereich.innerHTML =
+            "<p>Das Gästebuch konnte nicht geladen werden.</p>";
+
+        return;
+
+    }
+
+
+    const { data, error } =
+        await supabaseClient
+            .from("Freundebuch")
+            .select("*")
+            .order(
+                "id",
+                { ascending: false }
+            );
 
 
     if (error) {
 
         bereich.innerHTML =
-        "<p>Fehler beim Laden der Einträge: "
-        + error.message +
-        "</p>";
+            "<p>Fehler beim Laden der Einträge: " +
+            error.message +
+            "</p>";
 
         return;
 
@@ -177,7 +316,7 @@ async function ladeEintraege() {
     if (!data || data.length === 0) {
 
         bereich.innerHTML =
-        "<p>Noch keine Einträge vorhanden.</p>";
+            "<p>Noch keine Einträge vorhanden.</p>";
 
         return;
 
@@ -189,9 +328,11 @@ async function ladeEintraege() {
 
     data.forEach(eintrag => {
 
-        const box = document.createElement("div");
+        const box =
+            document.createElement("div");
 
-        box.className = "eintrag";
+        box.className =
+            "eintrag";
 
 
         box.innerHTML = `
@@ -199,28 +340,28 @@ async function ladeEintraege() {
             <h3>🌿 ${eintrag.name}</h3>
 
             <p>
-            <strong>Kennt A + B:</strong><br>
-            ${eintrag.kennt || ""}
+                <strong>Kennt A + B:</strong><br>
+                ${eintrag.kennt || ""}
             </p>
 
             <p>
-            <strong>In drei Worten:</strong><br>
-            ${eintrag.drei_worte || ""}
+                <strong>In drei Worten:</strong><br>
+                ${eintrag.drei_worte || ""}
             </p>
 
             <p>
-            <strong>Challenge:</strong><br>
-            ${eintrag.challenge || ""}
+                <strong>Challenge:</strong><br>
+                ${eintrag.challenge || ""}
             </p>
 
             <p>
-            <strong>Erinnerung:</strong><br>
-            ${eintrag.erinnerung || ""}
+                <strong>Erinnerung:</strong><br>
+                ${eintrag.erinnerung || ""}
             </p>
 
             <p>
-            <strong>Zeitkapsel:</strong><br>
-            ${eintrag.zeitkapsel || ""}
+                <strong>Zeitkapsel:</strong><br>
+                ${eintrag.zeitkapsel || ""}
             </p>
 
         `;
@@ -236,7 +377,11 @@ async function ladeEintraege() {
 ladeEintraege();
 
 
-function streitHelfer(){
+/* =========================================================
+   STREITHELFER
+   ========================================================= */
+
+function streitHelfer() {
 
     let antworten = [
 
@@ -256,107 +401,429 @@ function streitHelfer(){
 
 
     let zufall =
-    antworten[Math.floor(Math.random()*antworten.length)];
+        antworten[
+            Math.floor(
+                Math.random() *
+                antworten.length
+            )
+        ];
 
 
-    document.getElementById("streitAntwort").innerHTML =
-    zufall;
-
-}
-
-function orakel(){
-
-let antworten = [
-
-"2051: Lisa und Raoul lachen immer noch über dieselben Dinge. ❤️",
-
-"Die Glaskugel sagt: Viele gemeinsame Abenteuer warten.",
-
-"Raoul wird auch in 25 Jahren noch behaupten, recht gehabt zu haben.",
-
-"Lisa wird auch in 25 Jahren noch darüber diskutieren.",
-
-"Prognose: Liebe, Lachen und gelegentliche Diskussionen.",
-
-"Silberhochzeit sicher erreicht. Der Rest bleibt spannend."
-
-];
+    let feld =
+        document.getElementById(
+            "streitAntwort"
+        );
 
 
-document.getElementById("orakelAntwort").innerHTML =
-antworten[Math.floor(Math.random()*antworten.length)];
+    if (feld) {
+        feld.innerHTML = zufall;
+    }
 
 }
 
-function essenEntscheiden(){
 
-let essen = [
+/* =========================================================
+   ORAKEL
+   ========================================================= */
 
-"Pizza. Die Wissenschaft hat gesprochen. 🍕",
+function orakel() {
 
-"Bestellt beides. Problem gelöst.",
+    let antworten = [
 
-"Lisa entscheidet. Raoul stimmt glücklich zu.",
+        "2051: Lisa und Raoul lachen immer noch über dieselben Dinge. ❤️",
 
-"Nudeln. Weil Nudeln immer gehen.",
+        "Die Glaskugel sagt: Viele gemeinsame Abenteuer warten.",
 
-"Heute wird etwas genommen, das keiner kochen muss.",
+        "Raoul wird auch in 25 Jahren noch behaupten, recht gehabt zu haben.",
 
-"Überraschung: Es wird genau das, worauf Lisa Lust hat."
+        "Lisa wird auch in 25 Jahren noch darüber diskutieren.",
 
-];
+        "Prognose: Liebe, Lachen und gelegentliche Diskussionen.",
 
+        "Silberhochzeit sicher erreicht. Der Rest bleibt spannend."
 
-document.getElementById("essenAntwort").innerHTML =
-essen[Math.floor(Math.random()*essen.length)];
-
-}
-
-function alltag(){
-
-let urteile = [
-
-"Derjenige, der es zuerst gesehen hat, ist offiziell zuständig.",
-
-"Gemeinsam machen bedeutet: Einer macht es, einer motiviert.",
-
-"Der Schiedsrichter entscheidet: Raoul macht es. 😄",
-
-"Vertagt bis morgen. Ehe bleibt trotzdem bestehen.",
-
-"Derjenige mit der größeren Motivation gewinnt.",
-
-"Beide haben recht. Einer macht es trotzdem."
-
-];
+    ];
 
 
-document.getElementById("alltagAntwort").innerHTML =
-urteile[Math.floor(Math.random()*urteile.length)];
+    let feld =
+        document.getElementById(
+            "orakelAntwort"
+        );
+
+
+    if (feld) {
+
+        feld.innerHTML =
+            antworten[
+                Math.floor(
+                    Math.random() *
+                    antworten.length
+                )
+            ];
+
+    }
 
 }
 
-function liebe(){
 
-let antworten = [
+/* =========================================================
+   ESSEN ENTSCHEIDEN
+   ========================================================= */
 
-"Eine Umarmung wäre dringend empfohlen. ❤️",
+function essenEntscheiden() {
 
-"Kaffee machen zählt offiziell als Liebesbeweis.",
+    let essen = [
 
-"5 Minuten gemeinsam lachen – Therapie abgeschlossen.",
+        "Pizza. Die Wissenschaft hat gesprochen. 🍕",
 
-"Eine kleine Überraschung wäre perfekt.",
+        "Bestellt beides. Problem gelöst.",
 
-"Ein ehrliches 'Ich liebe dich' schlägt alles.",
+        "Lisa entscheidet. Raoul stimmt glücklich zu.",
 
-"Zusammen Zeit verbringen. Der Klassiker funktioniert."
+        "Nudeln. Weil Nudeln immer gehen.",
 
-];
+        "Heute wird etwas genommen, das keiner kochen muss.",
+
+        "Überraschung: Es wird genau das, worauf Lisa Lust hat."
+
+    ];
 
 
-document.getElementById("liebeAntwort").innerHTML =
-antworten[Math.floor(Math.random()*antworten.length)];
+    let feld =
+        document.getElementById(
+            "essenAntwort"
+        );
+
+
+    if (feld) {
+
+        feld.innerHTML =
+            essen[
+                Math.floor(
+                    Math.random() *
+                    essen.length
+                )
+            ];
+
+    }
 
 }
 
+
+/* =========================================================
+   ALLTAG
+   ========================================================= */
+
+function alltag() {
+
+    let urteile = [
+
+        "Derjenige, der es zuerst gesehen hat, ist offiziell zuständig.",
+
+        "Gemeinsam machen bedeutet: Einer macht es, einer motiviert.",
+
+        "Der Schiedsrichter entscheidet: Raoul macht es. 😄",
+
+        "Vertagt bis morgen. Ehe bleibt trotzdem bestehen.",
+
+        "Derjenige mit der größeren Motivation gewinnt.",
+
+        "Beide haben recht. Einer macht es trotzdem."
+
+    ];
+
+
+    let feld =
+        document.getElementById(
+            "alltagAntwort"
+        );
+
+
+    if (feld) {
+
+        feld.innerHTML =
+            urteile[
+                Math.floor(
+                    Math.random() *
+                    urteile.length
+                )
+            ];
+
+    }
+
+}
+
+
+/* =========================================================
+   LIEBE
+   ========================================================= */
+
+function liebe() {
+
+    let antworten = [
+
+        "Eine Umarmung wäre dringend empfohlen. ❤️",
+
+        "Kaffee machen zählt offiziell als Liebesbeweis.",
+
+        "5 Minuten gemeinsam lachen – Therapie abgeschlossen.",
+
+        "Eine kleine Überraschung wäre perfekt.",
+
+        "Ein ehrliches 'Ich liebe dich' schlägt alles.",
+
+        "Zusammen Zeit verbringen. Der Klassiker funktioniert."
+
+    ];
+
+
+    let feld =
+        document.getElementById(
+            "liebeAntwort"
+        );
+
+
+    if (feld) {
+
+        feld.innerHTML =
+            antworten[
+                Math.floor(
+                    Math.random() *
+                    antworten.length
+                )
+            ];
+
+    }
+
+}
+
+
+/* =========================================================
+   UNSERE GESCHICHTE
+   PDF-ALBUM
+   ========================================================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+
+        /* -------------------------------------------------
+           PDF-LISTE
+           ------------------------------------------------- */
+
+        const geschichtePDFs = [
+
+            "Zeitung/Seite_01.pdf",
+            "Zeitung/Seite_02.pdf",
+            "Zeitung/Seite_03.pdf",
+            "Zeitung/Seite_04.pdf",
+            "Zeitung/Seite_05.pdf",
+            "Zeitung/Seite_06.pdf",
+            "Zeitung/Seite_07.pdf",
+            "Zeitung/Seite_08.pdf",
+            "Zeitung/Seite_09.pdf",
+            "Zeitung/Seite_10.pdf",
+            "Zeitung/Seite_11.pdf",
+            "Zeitung/Seite_12.pdf",
+            "Zeitung/Seite_13.pdf",
+            "Zeitung/Seite_14.pdf",
+            "Zeitung/Seite_15.pdf",
+            "Zeitung/Seite_16.pdf",
+            "Zeitung/Seite_17.pdf",
+            "Zeitung/Seite_18.pdf",
+            "Zeitung/Seite_19.pdf",
+
+        ];
+
+
+        /* -------------------------------------------------
+           ELEMENTE
+           ------------------------------------------------- */
+
+        const pdfViewer =
+            document.getElementById(
+                "pdfViewer"
+            );
+
+        const albumStatus =
+            document.getElementById(
+                "albumStatus"
+            );
+
+        const seitenAnzeige =
+            document.getElementById(
+                "seitenAnzeige"
+            );
+
+        const zurueckButton =
+            document.getElementById(
+                "zurueckButton"
+            );
+
+        const weiterButton =
+            document.getElementById(
+                "weiterButton"
+            );
+
+        const pdfOpenButton =
+            document.getElementById(
+                "pdfOpenButton"
+            );
+
+
+        /* -------------------------------------------------
+           PRÜFEN
+           ------------------------------------------------- */
+
+        if (
+            !pdfViewer ||
+            !albumStatus ||
+            !seitenAnzeige ||
+            !zurueckButton ||
+            !weiterButton ||
+            !pdfOpenButton
+        ) {
+
+            return;
+
+        }
+
+
+        /* -------------------------------------------------
+           AKTUELLE PDF
+           ------------------------------------------------- */
+
+        let aktuellePDF = 0;
+
+
+        /* -------------------------------------------------
+           PDF ANZEIGEN
+           ------------------------------------------------- */
+
+        function zeigePDF(index) {
+
+            if (
+                index < 0 ||
+                index >= geschichtePDFs.length
+            ) {
+
+                return;
+
+            }
+
+
+            aktuellePDF = index;
+
+
+            const pfad =
+                geschichtePDFs[
+                    aktuellePDF
+                ];
+
+
+            /* PDF laden */
+
+            pdfViewer.src = pfad;
+
+
+            /* Titel */
+
+            pdfViewer.title =
+                "Unsere Geschichte – Seite " +
+                String(
+                    aktuellePDF + 1
+                ).padStart(2, "0");
+
+
+            /* Anzeige oben */
+
+            albumStatus.textContent =
+                "Seite " +
+                (aktuellePDF + 1) +
+                " von " +
+                geschichtePDFs.length;
+
+
+            /* Anzeige unten */
+
+            seitenAnzeige.textContent =
+                (aktuellePDF + 1) +
+                " / " +
+                geschichtePDFs.length;
+
+
+            /* Separaten PDF-Link aktualisieren */
+
+            pdfOpenButton.href =
+                pfad;
+
+
+            /* Zurück */
+
+            zurueckButton.disabled =
+                aktuellePDF === 0;
+
+
+            /* Weiter */
+
+            weiterButton.disabled =
+                aktuellePDF ===
+                geschichtePDFs.length - 1;
+
+        }
+
+
+        /* -------------------------------------------------
+           WEITER
+           ------------------------------------------------- */
+
+        weiterButton.addEventListener(
+            "click",
+            function () {
+
+                if (
+                    aktuellePDF <
+                    geschichtePDFs.length - 1
+                ) {
+
+                    zeigePDF(
+                        aktuellePDF + 1
+                    );
+
+                }
+
+            }
+        );
+
+
+        /* -------------------------------------------------
+           ZURÜCK
+           ------------------------------------------------- */
+
+        zurueckButton.addEventListener(
+            "click",
+            function () {
+
+                if (
+                    aktuellePDF > 0
+                ) {
+
+                    zeigePDF(
+                        aktuellePDF - 1
+                    );
+
+                }
+
+            }
+        );
+
+
+        /* -------------------------------------------------
+           START
+           ------------------------------------------------- */
+
+        zeigePDF(0);
+
+    }
+);
