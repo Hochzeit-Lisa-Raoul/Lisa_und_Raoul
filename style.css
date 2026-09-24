@@ -508,15 +508,9 @@ nav a{
     text-align: center;
 }
 
-
-/* Überschrift */
-
 .unsere-geschichte h2 {
     margin-bottom: 15px;
 }
-
-
-/* Einleitung */
 
 .geschichte-intro {
     max-width: 650px;
@@ -532,15 +526,10 @@ nav a{
 .geschichte-album {
     max-width: 900px;
     margin: 0 auto;
-
     padding: 20px;
-
     background: #fff;
-
     border-radius: 18px;
-
-    box-shadow:
-        0 8px 30px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
 }
 
 
@@ -552,20 +541,15 @@ nav a{
     display: flex;
     justify-content: space-between;
     align-items: center;
-
     padding: 5px 5px 18px;
-
     border-bottom: 1px solid rgba(0, 0, 0, 0.08);
-
     margin-bottom: 20px;
 }
-
 
 .album-titel {
     font-size: 18px;
     font-weight: 600;
 }
-
 
 .album-status {
     font-size: 14px;
@@ -579,29 +563,25 @@ nav a{
 
 .pdf-container {
     width: 100%;
-
     background: #f1f1f1;
-
     border-radius: 10px;
-
     overflow: hidden;
-
-    box-shadow:
-        inset 0 0 0 1px rgba(0, 0, 0, 0.06);
+    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.06);
 }
 
-
-/* Das eigentliche PDF-Fenster */
-
-.pdf-container iframe {
-    display: block;
-
+#pdfViewer {
     width: 100%;
+    position: relative;
+    overflow: hidden;
+    background: #f1f1f1;
+    text-align: center;
+}
 
-    height: 800px;
-
-    border: none;
-
+#pdfCanvas {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    margin: 0 auto;
     background: #fff;
 }
 
@@ -612,11 +592,8 @@ nav a{
 
 .pdf-hinweis {
     margin: 15px 0 20px;
-
     font-size: 13px;
-
     line-height: 1.5;
-
     opacity: 0.65;
 }
 
@@ -627,32 +604,19 @@ nav a{
 
 .album-navigation {
     display: flex;
-
     align-items: center;
-
     justify-content: space-between;
-
     gap: 20px;
-
     margin-top: 20px;
 }
 
-
-/* Buttons */
-
 .album-button {
     border: none;
-
     padding: 12px 22px;
-
     border-radius: 25px;
-
     background: #f3eee9;
-
     cursor: pointer;
-
     font-family: inherit;
-
     font-size: 15px;
 
     transition:
@@ -661,33 +625,19 @@ nav a{
         opacity 0.2s ease;
 }
 
-
-/* Hover */
-
 .album-button:hover:not(:disabled) {
     transform: translateY(-2px);
-
-    box-shadow:
-        0 5px 12px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 5px 12px rgba(0, 0, 0, 0.12);
 }
-
-
-/* Deaktivierter Button */
 
 .album-button:disabled {
     opacity: 0.35;
-
     cursor: default;
 }
 
-
-/* Seitenanzeige */
-
 .seiten-anzeige {
     font-size: 14px;
-
     opacity: 0.7;
-
     white-space: nowrap;
 }
 
@@ -700,20 +650,13 @@ nav a{
     margin-top: 20px;
 }
 
-
 .pdf-open-button {
     display: inline-block;
-
     padding: 9px 16px;
-
     border-radius: 20px;
-
     font-size: 13px;
-
     text-decoration: none;
-
     background: #f8f5f2;
-
     color: inherit;
 
     transition:
@@ -721,41 +664,8 @@ nav a{
         transform 0.2s ease;
 }
 
-
 .pdf-open-button:hover {
     transform: translateY(-1px);
-}
-
-
-/* =========================================================
-   WECHSEL-EFFEKT
-   ========================================================= */
-
-.pdf-container.wechsel {
-    opacity: 0.35;
-
-    transform: scale(0.99);
-
-    transition:
-        opacity 0.15s ease,
-        transform 0.15s ease;
-}
-
-
-/* =========================================================
-   TABLET
-   ========================================================= */
-
-@media (max-width: 850px) {
-
-    .unsere-geschichte {
-        margin: 50px auto;
-    }
-
-    .pdf-container iframe {
-        height: 700px;
-    }
-
 }
 
 
@@ -770,68 +680,53 @@ nav a{
         padding: 0 10px;
     }
 
-
     .geschichte-album {
         padding: 12px;
-
         border-radius: 14px;
     }
 
-
     .album-kopf {
         padding-bottom: 14px;
-
         margin-bottom: 12px;
     }
-
 
     .album-titel {
         font-size: 16px;
     }
 
-
     .album-status {
         font-size: 12px;
     }
-
-
-    /*
-       Auf dem Smartphone bekommt die PDF
-       etwas weniger Höhe, damit die Navigation
-       erreichbar bleibt.
-    */
-
-    .pdf-container iframe {
-        height: 650px;
-    }
-
 
     .pdf-hinweis {
         font-size: 12px;
     }
 
-
     .album-navigation {
         gap: 8px;
     }
 
-
     .album-button {
         padding: 10px 15px;
-
         font-size: 14px;
     }
-
 
     .seiten-anzeige {
         font-size: 13px;
     }
 
-
     .pdf-open-button {
         font-size: 12px;
     }
+}
 
+
+/* =========================================================
+   LADEZUSTAND
+   ========================================================= */
+
+.pdf-loading {
+    opacity: 0.5;
 }
 
 /* =========================================================
@@ -1063,3 +958,4 @@ nav a{
     font-weight: bold;
     line-height: 1.5;
 }
+

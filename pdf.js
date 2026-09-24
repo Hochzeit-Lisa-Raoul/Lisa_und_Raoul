@@ -1,753 +1,279 @@
-/* =========================================================
-   UNSERE GESCHICHTE
-   PDF-ALBUM MIT PDF.JS
-   ========================================================= */
+document.addEventListener("DOMContentLoaded", function () {
+    const pdfViewer = document.getElementById("pdfViewer");
+    const pdfCanvas = document.getElementById("pdfCanvas");
+    const zurueckButton = document.getElementById("zurueckButton");
+    const weiterButton = document.getElementById("weiterButton");
+    const seitenAnzeige = document.getElementById("seitenAnzeige");
+    const albumStatus = document.getElementById("albumStatus");
+    const pdfOpenButton = document.getElementById("pdfOpenButton");
 
+    if (!pdfViewer || !pdfCanvas) {
+        console.error("PDF-Viewer-Elemente wurden nicht gefunden.");
+        return;
+    }
 
-import * as pdfjsLib from
-    "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.10.38/pdf.min.mjs";
+    if (typeof pdfjsLib === "undefined") {
+        console.error("PDF.js wurde nicht geladen.");
+        return;
+    }
 
+    pdfjsLib.GlobalWorkerOptions.workerSrc =
+        "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
 
-pdfjsLib.GlobalWorkerOptions.workerSrc =
-    "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.10.38/pdf.worker.min.mjs";
+    const geschichtePDFs = [];
 
+    for (let i = 1; i <= 19; i++) {
+        const nummer = String(i).padStart(2, "0");
+        geschichtePDFs.push("Zeitung/Seite_" + nummer + ".pdf");
+    }
 
-document.addEventListener(
-    "DOMContentLoaded",
-    function () {
+    let aktuelleSeite = 1;
+    let pdfDokument = null;
+    let wirdGeladen = false;
 
+    function zeigeStatus() {
+        if (seitenAnzeige) {
+            seitenAnzeige.textContent =
+                aktuelleSeite + " / " + geschichtePDFs.length;
+        }
 
-        /* -------------------------------------------------
-           PDF-LISTE
-           ------------------------------------------------- */
+        if (albumStatus) {
+            albumStatus.textContent =
+                "Seite " + aktuelleSeite + " von " + geschichtePDFs.length;
+        }
 
-        const geschichtePDFs = [
+        if (zurueckButton) {
+            zurueckButton.disabled = aktuelleSeite <= 1;
+        }
 
-            "Zeitung/Seite_01.pdf",
-            "Zeitung/Seite_02.pdf",
-            "Zeitung/Seite_03.pdf",
-            "Zeitung/Seite_04.pdf",
-            "Zeitung/Seite_05.pdf",
-            "Zeitung/Seite_06.pdf",
-            "Zeitung/Seite_07.pdf",
-            "Zeitung/Seite_08.pdf",
-            "Zeitung/Seite_09.pdf",
-            "Zeitung/Seite_10.pdf",
-            "Zeitung/Seite_11.pdf",
-            "Zeitung/Seite_12.pdf",
-            "Zeitung/Seite_13.pdf",
-            "Zeitung/Seite_14.pdf",
-            "Zeitung/Seite_15.pdf",
-            "Zeitung/Seite_16.pdf",
-            "Zeitung/Seite_17.pdf",
-            "Zeitung/Seite_18.pdf",
-            "Zeitung/Seite_19.pdf"
+        if (weiterButton) {
+            weiterButton.disabled =
+                aktuelleSeite >= geschichtePDFs.length;
+        }
 
-        ];
+        if (pdfOpenButton) {
+            pdfOpenButton.href = geschichtePDFs[aktuelleSeite - 1];
+        }
+    }
 
-
-        /* -------------------------------------------------
-           ELEMENTE
-           ------------------------------------------------- */
-
-        const pdfViewer =
-            document.getElementById(
-                "pdfViewer"
-            );
-
-        const pdfCanvas =
-            document.getElementById(
-                "pdfCanvas"
-            );
-
-        const albumStatus =
-            document.getElementById(
-                "albumStatus"
-            );
-
-        const seitenAnzeige =
-            document.getElementById(
-                "seitenAnzeige"
-            );
-
-        const zurueckButton =
-            document.getElementById(
-                "zurueckButton"
-            );
-
-        const weiterButton =
-            document.getElementById(
-                "weiterButton"
-            );
-
-        const pdfOpenButton =
-            document.getElementById(
-                "pdfOpenButton"
-            );
-
-
-        /* -------------------------------------------------
-           PRÜFEN
-           ------------------------------------------------- */
-
-        if (
-            !pdfViewer ||
-            !pdfCanvas ||
-            !albumStatus ||
-            !seitenAnzeige ||
-            !zurueckButton ||
-            !weiterButton ||
-            !pdfOpenButton
-        ) {
-
-            console.error(
-                "PDF-Album: Benötigte HTML-Elemente fehlen."
-            );
-
+    async function ladePDF(nummer) {
+        if (wirdGeladen) {
             return;
-
         }
 
+        wirdGeladen = true;
 
-        /* -------------------------------------------------
-           CANVAS
-           ------------------------------------------------- */
+        pdfViewer.classList.add("pdf-loading");
 
-        const context =
-            pdfCanvas.getContext("2d");
+        try {
+            const datei = geschichtePDFs[nummer - 1];
 
+            console.log("Lade PDF:", datei);
 
-        /* -------------------------------------------------
-           PDF-DOKUMENTE
-           ------------------------------------------------- */
+            pdfDokument = await pdfjsLib
+                .getDocument(datei)
+                .promise;
 
-        let pdfDokumente = [];
+            console.log("PDF geladen:", datei);
 
+            await zeichneSeite(1);
 
-        /* -------------------------------------------------
-           AKTUELLE POSITION
-           ------------------------------------------------- */
+            aktuelleSeite = nummer;
+            zeigeStatus();
 
-        let aktuellesPDF = 0;
+        } catch (fehler) {
+            console.error("Fehler beim Laden der PDF:", fehler);
 
-        let aktuelleSeite = 1;
+            const context = pdfCanvas.getContext("2d");
 
-        let renderTask = null;
-
-
-        /* -------------------------------------------------
-           ALLE SEITEN ZÄHLEN
-           ------------------------------------------------- */
-
-        let gesamtSeiten = 0;
-
-
-        /* -------------------------------------------------
-           PDF-DOKUMENTE LADEN
-           ------------------------------------------------- */
-
-        async function ladePDFs() {
-
-            pdfViewer.classList.add(
-                "pdf-loading"
+            context.clearRect(
+                0,
+                0,
+                pdfCanvas.width,
+                pdfCanvas.height
             );
 
+            pdfCanvas.width = 600;
+            pdfCanvas.height = 200;
 
-            try {
+            context.font = "18px Arial";
+            context.textAlign = "center";
+            context.fillStyle = "#555";
 
-                for (
-                    let i = 0;
-                    i < geschichtePDFs.length;
-                    i++
-                ) {
+            context.fillText(
+                "Die PDF konnte nicht geladen werden.",
+                300,
+                90
+            );
 
-                    const loadingTask =
-                        pdfjsLib.getDocument(
-                            geschichtePDFs[i]
-                        );
+            context.font = "14px Arial";
 
+            context.fillText(
+                "Bitte die Browser-Konsole prüfen.",
+                300,
+                125
+            );
 
-                    const pdf =
-                        await loadingTask.promise;
+        } finally {
+            wirdGeladen = false;
+            pdfViewer.classList.remove("pdf-loading");
+        }
+    }
 
-
-                    pdfDokumente.push({
-                        pdf: pdf,
-                        startSeite:
-                            gesamtSeiten + 1,
-                        anzahlSeiten:
-                            pdf.numPages
-                    });
-
-
-                    gesamtSeiten +=
-                        pdf.numPages;
-
-                }
-
-
-                console.log(
-                    "PDF-Album geladen:",
-                    gesamtSeiten,
-                    "Seiten"
-                );
-
-
-                /* Erste Seite anzeigen */
-
-                await zeigeAktuelleSeite();
-
-
-            } catch (error) {
-
-                console.error(
-                    "PDFs konnten nicht geladen werden:",
-                    error
-                );
-
-
-            } finally {
-
-                pdfViewer.classList.remove(
-                    "pdf-loading"
-                );
-
-            }
-
+    async function zeichneSeite(seitennummer) {
+        if (!pdfDokument) {
+            return;
         }
 
+        try {
+            const seite = await pdfDokument.getPage(seitennummer);
 
-        /* -------------------------------------------------
-           AKTUELLE SEITE ANZEIGEN
-           ------------------------------------------------- */
+            const containerBreite = pdfViewer.clientWidth || 800;
 
-        async function zeigeAktuelleSeite() {
+            const grundViewport = seite.getViewport({
+                scale: 1
+            });
 
-            if (
-                !pdfDokumente.length
-            ) {
+            const skalierung =
+                containerBreite / grundViewport.width;
 
-                return;
+            const viewport = seite.getViewport({
+                scale: skalierung
+            });
 
-            }
+            const dpr = window.devicePixelRatio || 1;
 
+            pdfCanvas.width = Math.floor(
+                viewport.width * dpr
+            );
 
-            const dokument =
-                pdfDokumente[
-                    aktuellesPDF
-                ];
-
-
-            const pdf =
-                dokument.pdf;
-
-
-            /* -------------------------------------------------
-               SEITE LADEN
-               ------------------------------------------------- */
-
-            const page =
-                await pdf.getPage(
-                    aktuelleSeite
-                );
-
-
-            /* -------------------------------------------------
-               BREITE DES VIEWERS
-               ------------------------------------------------- */
-
-            let containerWidth = pdfViewer.clientWidth;
-
-/*
- * Falls der Container beim ersten Laden
- * noch keine Breite liefert, kurz warten.
- */
-if (!containerWidth) {
-
-    await new Promise(function (resolve) {
-        requestAnimationFrame(resolve);
-    });
-
-    containerWidth = pdfViewer.clientWidth;
-}
-
-
-/*
- * Sicherheitswert, falls die Breite
- * weiterhin noch nicht verfügbar ist.
- */
-if (!containerWidth) {
-    containerWidth = pdfCanvas.parentElement.clientWidth;
-}
-
-
-            const originalViewport =
-                page.getViewport({
-                    scale: 1
-                });
-
-
-            let scale =
-                containerWidth /
-                originalViewport.width;
-
-
-            /*
-               Verhindert, dass die Seite
-               auf großen Bildschirmen
-               unnötig riesig wird.
-            */
-
-            const maxScale =
-                1.5;
-
-
-            scale =
-                Math.min(
-                    scale,
-                    maxScale
-                );
-
-
-            const viewport =
-                page.getViewport({
-                    scale: scale
-                });
-
-
-            /* -------------------------------------------------
-               HOHE AUFLÖSUNG
-               ------------------------------------------------- */
-
-            const outputScale =
-                window.devicePixelRatio ||
-                1;
-
-
-            pdfCanvas.width =
-                Math.floor(
-                    viewport.width *
-                    outputScale
-                );
-
-
-            pdfCanvas.height =
-                Math.floor(
-                    viewport.height *
-                    outputScale
-                );
-
+            pdfCanvas.height = Math.floor(
+                viewport.height * dpr
+            );
 
             pdfCanvas.style.width =
-                Math.floor(
-                    viewport.width
-                ) + "px";
-
+                Math.floor(viewport.width) + "px";
 
             pdfCanvas.style.height =
-                Math.floor(
-                    viewport.height
-                ) + "px";
+                Math.floor(viewport.height) + "px";
 
+            const context = pdfCanvas.getContext("2d");
 
-            /* -------------------------------------------------
-               RENDERN
-               ------------------------------------------------- */
+            context.setTransform(
+                dpr,
+                0,
+                0,
+                dpr,
+                0,
+                0
+            );
 
-            if (renderTask) {
+            await seite.render({
+                canvasContext: context,
+                viewport: viewport
+            }).promise;
 
-                try {
+        } catch (fehler) {
+            console.error(
+                "Fehler beim Rendern der PDF-Seite:",
+                fehler
+            );
+        }
+    }
 
-                    renderTask.cancel();
-
-                } catch (e) {}
-
-            }
-
-
-            renderTask =
-                page.render({
-
-                    canvasContext:
-                        context,
-
-                    viewport:
-                        viewport,
-
-                    transform:
-                        outputScale !== 1
-                            ? [
-                                outputScale,
-                                0,
-                                0,
-                                outputScale,
-                                0,
-                                0
-                            ]
-                            : null
-
-                });
-
-
-            try {
-
-                await renderTask.promise;
-
-            } catch (error) {
-
-                /*
-                   Abgebrochene Render-Vorgänge
-                   ignorieren.
-                */
-
-                if (
-                    error?.name !==
-                    "RenderingCancelledException"
-                ) {
-
-                    console.error(
-                        error
-                    );
-
-                }
-
-                return;
-
-            }
-
-
-            renderTask = null;
-
-
-            /* -------------------------------------------------
-               STATUS AKTUALISIEREN
-               ------------------------------------------------- */
-
-            const globaleSeite =
-                dokument.startSeite +
-                aktuelleSeite -
-                1;
-
-
-            albumStatus.textContent =
-                "Seite " +
-                globaleSeite +
-                " von " +
-                gesamtSeiten;
-
-
-            seitenAnzeige.textContent =
-                globaleSeite +
-                " / " +
-                gesamtSeiten;
-
-
-            /* -------------------------------------------------
-               BUTTONS
-               ------------------------------------------------- */
-
-            const istErsteSeite =
-                globaleSeite === 1;
-
-
-            const istLetzteSeite =
-                globaleSeite ===
-                gesamtSeiten;
-
-
-            zurueckButton.disabled =
-                istErsteSeite;
-
-
-            weiterButton.disabled =
-                istLetzteSeite;
-
-
-            /* -------------------------------------------------
-               PDF SEPARAT ÖFFNEN
-               ------------------------------------------------- */
-
-            pdfOpenButton.href =
-                geschichtePDFs[
-                    aktuellesPDF
-                ];
-
+    async function naechsteSeite() {
+        if (aktuelleSeite >= geschichtePDFs.length) {
+            return;
         }
 
+        await ladePDF(aktuelleSeite + 1);
+    }
 
-        /* -------------------------------------------------
-           NÄCHSTE SEITE
-           ------------------------------------------------- */
-
-        async function naechsteSeite() {
-
-            const dokument =
-                pdfDokumente[
-                    aktuellesPDF
-                ];
-
-
-            /*
-               Noch eine Seite innerhalb
-               derselben PDF?
-            */
-
-            if (
-                aktuelleSeite <
-                dokument.anzahlSeiten
-            ) {
-
-                aktuelleSeite++;
-
-                await zeigeAktuelleSeite();
-
-                return;
-
-            }
-
-
-            /*
-               Ende dieser PDF erreicht.
-               Gibt es eine nächste PDF?
-            */
-
-            if (
-                aktuellesPDF <
-                pdfDokumente.length - 1
-            ) {
-
-                aktuellesPDF++;
-
-                aktuelleSeite = 1;
-
-                await zeigeAktuelleSeite();
-
-            }
-
+    async function vorherigeSeite() {
+        if (aktuelleSeite <= 1) {
+            return;
         }
 
+        await ladePDF(aktuelleSeite - 1);
+    }
 
-        /* -------------------------------------------------
-           VORHERIGE SEITE
-           ------------------------------------------------- */
-
-        async function vorherigeSeite() {
-
-            /*
-               Noch eine Seite innerhalb
-               derselben PDF?
-            */
-
-            if (
-                aktuelleSeite > 1
-            ) {
-
-                aktuelleSeite--;
-
-                await zeigeAktuelleSeite();
-
-                return;
-
-            }
-
-
-            /*
-               Anfang dieser PDF erreicht.
-               Gibt es eine vorherige PDF?
-            */
-
-            if (
-                aktuellesPDF > 0
-            ) {
-
-                aktuellesPDF--;
-
-                aktuelleSeite =
-                    pdfDokumente[
-                        aktuellesPDF
-                    ].anzahlSeiten;
-
-
-                await zeigeAktuelleSeite();
-
-            }
-
-        }
-
-
-        /* -------------------------------------------------
-           WEITER BUTTON
-           ------------------------------------------------- */
-
+    if (weiterButton) {
         weiterButton.addEventListener(
             "click",
-            function () {
-
-                naechsteSeite();
-
-            }
+            naechsteSeite
         );
+    }
 
-
-        /* -------------------------------------------------
-           ZURÜCK BUTTON
-           ------------------------------------------------- */
-
+    if (zurueckButton) {
         zurueckButton.addEventListener(
             "click",
-            function () {
-
-                vorherigeSeite();
-
-            }
+            vorherigeSeite
         );
-
-
-        /* =================================================
-           WISCHEN AUF DEM HANDY
-           ================================================= */
-
-        let touchStartX = 0;
-        let touchStartY = 0;
-
-
-        pdfViewer.addEventListener(
-            "touchstart",
-            function (event) {
-
-                const touch =
-                    event.changedTouches[0];
-
-
-                touchStartX =
-                    touch.screenX;
-
-
-                touchStartY =
-                    touch.screenY;
-
-            },
-            {
-                passive: true
-            }
-        );
-
-
-        pdfViewer.addEventListener(
-            "touchend",
-            function (event) {
-
-                const touch =
-                    event.changedTouches[0];
-
-
-                const touchEndX =
-                    touch.screenX;
-
-
-                const touchEndY =
-                    touch.screenY;
-
-
-                const deltaX =
-                    touchEndX -
-                    touchStartX;
-
-
-                const deltaY =
-                    touchEndY -
-                    touchStartY;
-
-
-                /*
-                   Nur reagieren, wenn es
-                   wirklich ein horizontaler
-                   Wisch war.
-                */
-
-                if (
-                    Math.abs(deltaX) < 50
-                ) {
-
-                    return;
-
-                }
-
-
-                if (
-                    Math.abs(deltaX) <
-                    Math.abs(deltaY)
-                ) {
-
-                    return;
-
-                }
-
-
-                if (
-                    deltaX < 0
-                ) {
-
-                    /*
-                       Wisch nach links
-                       = nächste Seite
-                    */
-
-                    naechsteSeite();
-
-                } else {
-
-                    /*
-                       Wisch nach rechts
-                       = vorherige Seite
-                    */
-
-                    vorherigeSeite();
-
-                }
-
-            },
-            {
-                passive: true
-            }
-        );
-
-
-        /* =================================================
-           NEUSKALIERUNG
-           ================================================= */
-
-        let resizeTimeout;
-
-
-        window.addEventListener(
-            "resize",
-            function () {
-
-                clearTimeout(
-                    resizeTimeout
-                );
-
-
-                resizeTimeout =
-                    setTimeout(
-                        function () {
-
-                            zeigeAktuelleSeite();
-
-                        },
-                        200
-                    );
-
-            }
-        );
-
-
-        /* -------------------------------------------------
-           START
-           ------------------------------------------------- */
-
-        ladePDFs();
-
     }
-);
+
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    pdfViewer.addEventListener(
+        "touchstart",
+        function (event) {
+            if (!event.changedTouches.length) {
+                return;
+            }
+
+            touchStartX =
+                event.changedTouches[0].screenX;
+        },
+        { passive: true }
+    );
+
+    pdfViewer.addEventListener(
+        "touchend",
+        function (event) {
+            if (!event.changedTouches.length) {
+                return;
+            }
+
+            touchEndX =
+                event.changedTouches[0].screenX;
+
+            const differenz =
+                touchEndX - touchStartX;
+
+            if (Math.abs(differenz) < 50) {
+                return;
+            }
+
+            if (differenz < 0) {
+                naechsteSeite();
+            } else {
+                vorherigeSeite();
+            }
+        },
+        { passive: true }
+    );
+
+    let resizeTimer = null;
+
+    window.addEventListener(
+        "resize",
+        function () {
+            clearTimeout(resizeTimer);
+
+            resizeTimer = setTimeout(
+                function () {
+                    if (pdfDokument) {
+                        zeichneSeite(1);
+                    }
+                },
+                150
+            );
+        }
+    );
+
+    zeigeStatus();
+
+    // Wichtig:
+    // Seite 1 sofort laden und anzeigen.
+    ladePDF(1);
+});
