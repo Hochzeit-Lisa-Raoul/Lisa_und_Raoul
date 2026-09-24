@@ -256,8 +256,29 @@ document.addEventListener(
                BREITE DES VIEWERS
                ------------------------------------------------- */
 
-            const containerWidth =
-                pdfViewer.clientWidth;
+            let containerWidth = pdfViewer.clientWidth;
+
+/*
+ * Falls der Container beim ersten Laden
+ * noch keine Breite liefert, kurz warten.
+ */
+if (!containerWidth) {
+
+    await new Promise(function (resolve) {
+        requestAnimationFrame(resolve);
+    });
+
+    containerWidth = pdfViewer.clientWidth;
+}
+
+
+/*
+ * Sicherheitswert, falls die Breite
+ * weiterhin noch nicht verfügbar ist.
+ */
+if (!containerWidth) {
+    containerWidth = pdfCanvas.parentElement.clientWidth;
+}
 
 
             const originalViewport =
