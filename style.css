@@ -179,6 +179,44 @@ footer {
     border-radius: 15px;
 }
 
+/* ---------- Verlobungs-Bild ---------- */
+
+.verlobung-item .timeline-image {
+    position: absolute;
+    left: -50%;
+    top: 20px;
+    margin-left: 40px;
+    width: 150px;
+}
+
+.verlobung-item .timeline-image img {
+    display: block;
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 15px;
+}
+
+
+/* ---------- Hochzeits-Bild ---------- */
+
+.hochzeit-item .timeline-image {
+    position: absolute;
+    left: 100%;
+    top: 20px;
+    margin-left: 40px;
+    width: 150px;
+}
+
+.hochzeit-item .timeline-image img {
+    display: block;
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 15px;
+}
+
+
 /* ---------- Galerie ---------- */
 
 .galerie {
@@ -428,6 +466,35 @@ nav a{
         height: 100px;
         margin: 0 auto;
     }
+
+   /*Verlobungsbild auf dem Handy */
+    .verlobung-item .timeline-image {
+        position: static;
+        width: 100%;
+        margin: 15px 0 0 0;
+    }
+
+    .verlobung-item .timeline-image img {
+        width: 100px;
+        height: 100px;
+        margin: 0 auto;
+    }
+
+   /*Hochzeitsbild auf dem Handy */
+    .hochzeit-item .timeline-image {
+        position: static;
+        width: 100%;
+        margin: 15px 0 0 0;
+    }
+
+    .hochzeit-item .timeline-image img {
+        width: 100px;
+        height: 100px;
+        margin: 0 auto;
+    }
+
+
+
 }
 
 /* =========================================================

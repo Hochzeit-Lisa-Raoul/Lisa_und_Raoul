@@ -30,7 +30,7 @@ if (window.supabase) {
    ========================================================= */
 
 const hochzeit =
-    new Date(2026, 8, 17, 0, 0, 0);
+    new Date(2026, 8, 17, 12, 0, 0);
 
 const silberhochzeit =
     new Date(2051, 8, 17, 0, 0, 0);
@@ -345,18 +345,18 @@ async function ladeEintraege() {
             </p>
 
             <p>
-                <strong>In drei Worten:</strong><br>
-                ${eintrag.drei_worte || ""}
+                <strong>Schlagzeile:</strong><br>
+                ${eintrag.Schlagzeile || ""}
             </p>
 
             <p>
-                <strong>Challenge:</strong><br>
-                ${eintrag.challenge || ""}
+                <strong>challange:</strong><br>
+                ${eintrag.challange || ""}
             </p>
 
             <p>
-                <strong>Erinnerung:</strong><br>
-                ${eintrag.erinnerung || ""}
+                <strong>Titel:</strong><br>
+                ${eintrag.Titel || ""}
             </p>
 
             <p>
