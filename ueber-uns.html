@@ -58,11 +58,9 @@
         <!-- PDF-Bereich -->
         <div class="pdf-container">
 
-            <iframe
-                id="pdfViewer"
-                src="Zeitung/Seite_01.pdf"
-                title="Unsere Geschichte – Seite 01">
-            </iframe>
+<div id="pdfViewer">
+    <canvas id="pdfCanvas"></canvas>
+</div>
 
         </div>
 
@@ -127,6 +125,8 @@
 ❦ Lisa & Raoul ❦
 
 </footer>
+
+<script type="module" src="pdf.js"></script>
 
 <script src="script.js"></script>
 
