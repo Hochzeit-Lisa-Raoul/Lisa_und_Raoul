@@ -1,3 +1,4 @@
+
 document.addEventListener("DOMContentLoaded", function () {
     const pdfViewer = document.getElementById("pdfViewer");
     const pdfCanvas = document.getElementById("pdfCanvas");
@@ -22,7 +23,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const geschichtePDFs = [];
 
-    for (let i = 1; i <= 19; i++) {
+    for (let i = 1; i <= 28; i++) {
         const nummer = String(i).padStart(2, "0");
         geschichtePDFs.push("Zeitung/Seite_" + nummer + ".pdf");
     }
